@@ -18,8 +18,6 @@ Ticker timerMagneticLockAlarm(checkMagneticLockAlarm, 4321); // 4 sec
 void sendDataToBlynkIfAlarm();
 Ticker timerSendDataToBlynkIfAlarm(sendDataToBlynkIfAlarm, 20000); // 20 sec
 
-// https://github.com/stephaneAG/SIM800L/blob/master/README.md
-
 void setup()
 {
   Serial.begin(115200);

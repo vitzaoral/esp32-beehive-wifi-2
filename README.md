@@ -21,22 +21,16 @@ struct Settings
 ```
 ### Features
 * measuring the temperature and humidity inside the hive
-measuring the temperature, humidity and pressure outside the hive
-* triggers an alarm (SMS/call/notification) when someone opens the hive - gyroscope sensor
-* triggers an alarm (SMS / call / notification) when someone picks up the hive - a magnetic contact sensor
-* audio transmission via SMI800L - mobile phone call
+* triggers an alarm (Blynk notification) when someone opens the hive - a magnetic contact sensor
+* triggers an alarm (Blynk notification) when someone picks up the hive - a magnetic contact sensor
 
 ### Currents list:
 
 * [ESP32 WROOM-32](https://www.aliexpress.com/item/ESP32-ESP-32-ESP32S-ESP-32S-CP2102-Wireless-WiFi-Bluetooth-Development-Board-Micro-USB-Dual-Core/32867696371.html)
-* [MMA8452 Triaxial Accelerometer](https://www.aliexpress.com/item/2038557878.html)
 * [SHT30 digital temperature/humidity sensor](https://www.aliexpress.com/item/32962846003.html)
-* [BMP280 digital temperature/humidity/pressure sensor](https://www.aliexpress.com/item/32849462236.html)
-* [SIM 800L module](https://www.aliexpress.com/item/32671921426.html)
-* [MAX4466 microphone](https://www.aliexpress.com/item/32757294757.html)
 * [INA219 sensor](https://www.aliexpress.com/item/32846796535.html)
 * [Magnetic contact sensor](https://www.aliexpress.com/item/32840447389.html)
-* Solar panel 18V with battery and solar charger or other power supply
+* Solar panel 12V with battery and solar charger or other power supply
 
 ### Save battery power:
 * Set CPU frequency to 30% (80Mhz) - *setCpuFrequencyMhz(80);*
@@ -45,7 +39,7 @@ measuring the temperature, humidity and pressure outside the hive
 * When disconnect WiFi, turn off WiFi modem - *WiFi.disconnect(true);*
 
 ### Schema:
-![Schema](https://github.com/vitzaoral/esp32-beehive-wifi/blob/master/schema/schema.png)
+![Schema](https://github.com/vitzaoral/esp32-beehive-wifi-2/blob/master/schema/schema.png)
 
 ### Powering 5V -> 3.3V:
 3v3 regulator - https://randomnerdtutorials.com/esp8266-voltage-regulator-lipo-and-li-ion-batteries/
