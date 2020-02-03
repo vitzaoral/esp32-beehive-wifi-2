@@ -221,8 +221,8 @@ void InternetConnection::sendDataToBlynk(
 
         // microphones
          Blynk.virtualWrite(V44, microphoneController.sensorD.leq);
-         Blynk.virtualWrite(V45, microphoneController.senzorE.leq);
-         Blynk.virtualWrite(V46, microphoneController.senzorF.leq);
+         Blynk.virtualWrite(V45, microphoneController.sensorE.leq);
+         Blynk.virtualWrite(V46, microphoneController.sensorF.leq);
 
         // set SDA/SCL status
         setI2CStatusVersion();
