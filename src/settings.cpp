@@ -3,9 +3,9 @@
 
 struct Settings
 {
-    const char *wifiSSID = "YYY";
-    const char *wifiPassword = "ZZZ";
-    const char *blynkAuth = "TODO";
+    const char *wifiSSID = "Zaoralci";
+    const char *wifiPassword = "74901Vita1";
+    const char *blynkAuth = "G5MaJRaDEftlB_SNriq7XK2f1Td056AJ";
     const char *version = "1.0.0";
     const char *firmwareVersionUrl = "http://example.com/version.txt";
     const char *firmwareBinUrl = "http://example.com/firmware.bin";

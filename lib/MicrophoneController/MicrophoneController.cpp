@@ -38,6 +38,7 @@ MicrophoneController::MicrophoneController()
 {
     pinMode(MIC_1_CHANEL, OUTPUT);
     pinMode(MIC_2_CHANEL, OUTPUT);
+    pinMode(MIC_3_CHANEL, OUTPUT);
     delay(500);
 
     MicrophoneController::mic_i2s_install();
@@ -51,25 +52,40 @@ void MicrophoneController::setData()
     // MIC 1
     digitalWrite(MIC_1_CHANEL, LOW);
     digitalWrite(MIC_2_CHANEL, HIGH);
+    digitalWrite(MIC_3_CHANEL, HIGH);
 
     delay(500);
     i2s_start(I2S_PORT);
     delay(500);
 
     Serial.print("First MIC: ");
-    setSensorData(&sensorA);
+    setSensorData(&sensorD);
     i2s_stop(I2S_PORT);
 
     // MIC 2
     digitalWrite(MIC_1_CHANEL, HIGH);
     digitalWrite(MIC_2_CHANEL, LOW);
+    digitalWrite(MIC_3_CHANEL, HIGH);
 
     delay(500);
     i2s_start(I2S_PORT);
     delay(500);
 
     Serial.print("Second MIC: ");
-    setSensorData(&sensorB);
+    setSensorData(&sensorE);
+    i2s_stop(I2S_PORT);
+
+    // MIC 3
+    digitalWrite(MIC_1_CHANEL, HIGH);
+    digitalWrite(MIC_2_CHANEL, HIGH);
+    digitalWrite(MIC_3_CHANEL, LOW);
+
+    delay(500);
+    i2s_start(I2S_PORT);
+    delay(500);
+
+    Serial.print("Third MIC: ");
+    setSensorData(&sensorF);
     i2s_stop(I2S_PORT);
 }
 

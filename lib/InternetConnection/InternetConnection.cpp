@@ -186,7 +186,8 @@ void InternetConnection::disconnect()
 void InternetConnection::sendDataToBlynk(
     MeteoData meteoData,
     PowerController powerController,
-    MagneticLockController magneticLockController)
+    MagneticLockController magneticLockController,
+    MicrophoneController microphoneController)
 {
     // create data to send to Blynk
     if (Blynk.connected())
@@ -217,6 +218,11 @@ void InternetConnection::sendDataToBlynk(
         // meteo data C
         Blynk.virtualWrite(V12, meteoData.sensorC.humidity);
         Blynk.virtualWrite(V13, meteoData.sensorC.temperature);
+
+        // microphones
+         Blynk.virtualWrite(V44, microphoneController.sensorD.leq);
+         Blynk.virtualWrite(V45, microphoneController.senzorE.leq);
+         Blynk.virtualWrite(V46, microphoneController.senzorF.leq);
 
         // set SDA/SCL status
         setI2CStatusVersion();

@@ -1,5 +1,6 @@
 #ifndef __MicrophoneController_H
 #define __MicrophoneController_H
+
 #include <Arduino.h>
 
 #include <driver/i2s.h>
@@ -34,13 +35,15 @@
 // I2S pins
 //
 
-// MIC 1
+// MIC settings
 #define MIC_1_I2S_WS 12
 #define MIC_1_I2S_SD 14  //- OK da se menit OK: 32, 35, 33
 #define MIC_1_I2S_SCK 13 // OK 13, 14
 
-#define MIC_1_CHANEL 18
-#define MIC_2_CHANEL 19
+// multiple MIC sensors
+#define MIC_1_CHANEL 19
+#define MIC_2_CHANEL 18
+#define MIC_3_CHANEL 5
 
 //
 // Sampling
@@ -63,9 +66,9 @@ class MicrophoneController
 {
 public:
     MicrophoneController();
-    MicrophoneData sensorA;
-    MicrophoneData sensorB;
-    MicrophoneData sensorC;
+    MicrophoneData sensorD;
+    MicrophoneData sensorE;
+    MicrophoneData sensorF;
     void setData();
 
 private:

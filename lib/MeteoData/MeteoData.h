@@ -5,9 +5,9 @@
 #include <Adafruit_Sensor.h>
 #include <Adafruit_SHT31.h>
 
-#define SENSOR_A_PIN 19
-#define SENSOR_B_PIN 18
-#define SENSOR_C_PIN 5
+#define SENSOR_A_PIN 17
+#define SENSOR_B_PIN 16
+#define SENSOR_C_PIN 4
 
 struct TempAndHumidity
 {

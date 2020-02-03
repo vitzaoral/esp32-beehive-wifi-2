@@ -1,6 +1,5 @@
 #include <Arduino.h>
 #include <InternetConnection.h>
-#include <MicrophoneController.h>
 #include <Ticker.h>
 #include "esp32-hal-cpu.h"
 
@@ -16,7 +15,7 @@ void checkMicrophones();
 
 Ticker timerSendDataToInternet(sendDataToInternet, 288000);  // 4.8 min 288000
 Ticker timerMagneticLockAlarm(checkMagneticLockAlarm, 4321); // 4 sec
-Ticker timerMicrophoneController(checkMicrophones, 281000); // 4 TODO..
+Ticker timerMicrophoneController(checkMicrophones, 281000);  // 4 TODO..
 
 // alarm section
 void sendDataToBlynkIfAlarm();
@@ -66,7 +65,7 @@ void sendDataToInternet()
     // gyroscope and magnetic locks data are set in other timer more often, so we have actual data
 
     Serial.println("Sending data to Blynk");
-    connection.sendDataToBlynk(meteoData, powerController, magneticLockController);
+    connection.sendDataToBlynk(meteoData, powerController, magneticLockController, microphoneController);
     connection.checkNewVersionAndUpdate();
     connection.disconnect();
   }

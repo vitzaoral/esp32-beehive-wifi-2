@@ -7,6 +7,7 @@
 #include <MeteoData.h>
 #include <PowerController.h>
 #include <MagneticLockController.h>
+#include <MicrophoneController.h>
 
 class InternetConnection
 {
@@ -15,7 +16,7 @@ public:
   bool isAlarm;
   bool initializeConnection();
   void disconnect();
-  void sendDataToBlynk(MeteoData, PowerController, MagneticLockController);
+  void sendDataToBlynk(MeteoData, PowerController, MagneticLockController, MicrophoneController);
   void alarmMagneticController(MagneticLockController);
   void blynkRunIfAlarm();
   void setMagneticLockControllerDataToBlynkIfAlarm(MagneticLockController);
