@@ -20,6 +20,7 @@ struct Settings
 ```
 ### Features
 * measuring the temperature and humidity inside the hive
+* measuring the sound level inside the hive
 * triggers an alarm (Blynk notification) when someone opens the hive - a magnetic contact sensor
 * triggers an alarm (Blynk notification) when someone picks up the hive - a magnetic contact sensor
 
@@ -28,6 +29,7 @@ struct Settings
 * [ESP32 WROOM-32](https://www.aliexpress.com/item/ESP32-ESP-32-ESP32S-ESP-32S-CP2102-Wireless-WiFi-Bluetooth-Development-Board-Micro-USB-Dual-Core/32867696371.html)
 * [SHT30 digital temperature/humidity sensor](https://www.aliexpress.com/item/32962846003.html)
 * [INA219 sensor](https://www.aliexpress.com/item/32846796535.html)
+* [INMP441 microphone](https://www.aliexpress.com/item/32961274528.html)
 * [Magnetic contact sensor](https://www.aliexpress.com/item/32840447389.html)
 * Solar panel 12V with battery and solar charger or other power supply
 
