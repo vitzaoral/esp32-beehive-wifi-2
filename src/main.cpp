@@ -1,5 +1,6 @@
 #include <Arduino.h>
 #include <InternetConnection.h>
+#include <MicrophoneController.h>
 #include <Ticker.h>
 #include "esp32-hal-cpu.h"
 
@@ -7,12 +8,15 @@ InternetConnection connection;
 MeteoData meteoData;
 PowerController powerController;
 MagneticLockController magneticLockController;
+MicrophoneController microphoneController;
 
 void sendDataToInternet();
 void checkMagneticLockAlarm();
+void checkMicrophones();
 
 Ticker timerSendDataToInternet(sendDataToInternet, 288000);  // 4.8 min 288000
 Ticker timerMagneticLockAlarm(checkMagneticLockAlarm, 4321); // 4 sec
+Ticker timerMicrophoneController(checkMicrophones, 281000); // 4 TODO..
 
 // alarm section
 void sendDataToBlynkIfAlarm();
@@ -46,6 +50,7 @@ void loop()
   timerSendDataToInternet.update();
   timerMagneticLockAlarm.update();
   timerSendDataToBlynkIfAlarm.update();
+  timerMicrophoneController.update();
 
   connection.blynkRunIfAlarm();
 }
@@ -94,4 +99,9 @@ void checkMagneticLockAlarm()
 void sendDataToBlynkIfAlarm()
 {
   connection.setMagneticLockControllerDataToBlynkIfAlarm(magneticLockController);
+}
+
+void checkMicrophones()
+{
+  microphoneController.setData();
 }
