@@ -115,7 +115,8 @@ bool InternetConnection::initializeConnection()
     delay(1);
 
     // try config - quicker for WiFi connection
-    WiFi.config(settings.ip, settings.gateway, settings.subnet, settings.gateway);
+    // TODO:
+    //WiFi.config(settings.ip, settings.gateway, settings.subnet, settings.gateway);
 
     WiFi.begin(settings.wifiSSID, settings.wifiPassword);
     while (WiFi.status() != WL_CONNECTED)
@@ -260,7 +261,7 @@ void InternetConnection::setAlarmInfoToBlynk()
 
     if (isAlarm)
     {
-        Serial.println("\n ALARM \n");
+        Serial.println("\n !! ALARM !! \n");
     }
 }
 

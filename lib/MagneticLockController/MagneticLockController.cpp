@@ -25,11 +25,11 @@ void MagneticLockController::setData()
 
     // Roofs
     Serial.print("Magnetic roof lock A: ");
-    setSensorData(&sensorA, LOCK_ROOF_A_PIN);
+    setSensorData(&sensorRoofA, LOCK_ROOF_A_PIN);
     Serial.print("Magnetic roof lock B: ");
-    setSensorData(&sensorB, LOCK_ROOF_B_PIN);
+    setSensorData(&sensorRoofB, LOCK_ROOF_B_PIN);
     Serial.print("Magnetic roof lock C: ");
-    setSensorData(&sensorC, LOCK_ROOF_C_PIN);
+    setSensorData(&sensorRoofC, LOCK_ROOF_C_PIN);
 }
 
 void MagneticLockController::setSensorData(LockData *data, int pin)
