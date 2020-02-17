@@ -33,6 +33,9 @@ bool startOTA = false;
 #define SDA 21
 #define SCL 22
 
+// ESP32 hard reset  via mosfet: connect GND to EN pin => reset
+#define RESET_PIN 34
+
 // need lot of blynk virtual pins :)
 #define BLYNK_USE_128_VPINS
 
@@ -48,38 +51,10 @@ BLYNK_WRITE(V0)
     if (param.asInt())
     {
         Blynk.virtualWrite(V0, false);
-
-        // TODO: refactor, odstranit? https://github.com/espressif/arduino-esp32/issues/1563#issuecomment-401560601
-        Serial.println("Check I2C");
-        if (!digitalRead(SDA) || !digitalRead(SCL))
-        { // bus in busy state
-            log_w("invalid state sda=%d, scl=%d\n", digitalRead(SDA), digitalRead(SCL));
-            Serial.print("invalid state SDA: ");
-            Serial.println(digitalRead(SDA));
-            Serial.print("invalid state SCL: ");
-            Serial.println(digitalRead(SCL));
-            digitalWrite(SDA, HIGH);
-            digitalWrite(SCL, HIGH);
-            delayMicroseconds(5);
-            digitalWrite(SDA, HIGH);
-            for (uint8_t a = 0; a < 9; a++)
-            {
-                delayMicroseconds(5);
-                digitalWrite(SCL, LOW);
-                delayMicroseconds(5);
-                digitalWrite(SCL, HIGH);
-                if (digitalRead(SDA))
-                { // bus recovered, all done. resync'd with slave
-                    break;
-                }
-            }
-        }
-        else
-        {
-            Serial.println("I2C OK");
-        }
         Serial.println("Restarting, bye..");
-        ESP.restart();
+        delay(500);
+        // hard reset
+        digitalWrite(RESET_PIN, HIGH);
     }
 }
 
@@ -126,6 +101,8 @@ void InternetConnection::initialize()
 {
     // true if is actual alarm - run Blynk.run
     isAlarm = false;
+    // for reset via mosfet -> en pin
+    pinMode(RESET_PIN, OUTPUT);
 }
 
 bool InternetConnection::initializeConnection()
@@ -220,9 +197,9 @@ void InternetConnection::sendDataToBlynk(
         Blynk.virtualWrite(V13, meteoData.sensorC.temperature);
 
         // microphones
-         Blynk.virtualWrite(V44, microphoneController.sensorD.leq);
-         Blynk.virtualWrite(V45, microphoneController.sensorE.leq);
-         Blynk.virtualWrite(V46, microphoneController.sensorF.leq);
+        Blynk.virtualWrite(V44, microphoneController.sensorD.leq);
+        Blynk.virtualWrite(V45, microphoneController.sensorE.leq);
+        Blynk.virtualWrite(V46, microphoneController.sensorF.leq);
 
         // set SDA/SCL status
         setI2CStatusVersion();
