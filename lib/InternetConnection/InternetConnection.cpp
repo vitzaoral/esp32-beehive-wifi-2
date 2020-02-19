@@ -34,7 +34,7 @@ bool startOTA = false;
 #define SCL 22
 
 // ESP32 hard reset  via mosfet: connect GND to EN pin => reset
-#define RESET_PIN 34
+#define RESET_PIN 2
 
 // need lot of blynk virtual pins :)
 #define BLYNK_USE_128_VPINS
@@ -52,6 +52,8 @@ BLYNK_WRITE(V0)
     {
         Blynk.virtualWrite(V0, false);
         Serial.println("Restarting, bye..");
+        terminal.write("Restarting, bye..");
+        terminal.flush();
         delay(500);
         // hard reset
         digitalWrite(RESET_PIN, HIGH);
@@ -97,7 +99,7 @@ BLYNK_WRITE(V36)
     }
 }
 
-void InternetConnection::initialize()
+InternetConnection::InternetConnection()
 {
     // true if is actual alarm - run Blynk.run
     isAlarm = false;
@@ -170,11 +172,6 @@ void InternetConnection::sendDataToBlynk(
     // create data to send to Blynk
     if (Blynk.connected())
     {
-        // TODO: battery data
-        // Blynk.virtualWrite(V2, modem.getBattPercent());
-        // float battVoltage = modem.getBattVoltage() / 1000.0F;
-        // Blynk.virtualWrite(V3, battVoltage);
-
         // meteo data A
         Blynk.virtualWrite(V4, meteoData.sensorA.humidity);
         Blynk.virtualWrite(V5, meteoData.sensorA.temperature);
@@ -193,6 +190,10 @@ void InternetConnection::sendDataToBlynk(
         Blynk.virtualWrite(V42, powerController.sensor_battery.current_mA);
         Blynk.virtualWrite(V43, powerController.sensor_battery.power_mW);
 
+        // 3100mV is minimum value, 4204mV is maximum value, difference is 1104mV
+        int percent = ((powerController.sensor_battery.loadVoltage - 3.1) / 1.104) * 100.0;
+        Blynk.virtualWrite(V2, percent);
+
         // meteo data C
         Blynk.virtualWrite(V12, meteoData.sensorC.humidity);
         Blynk.virtualWrite(V13, meteoData.sensorC.temperature);
@@ -201,6 +202,14 @@ void InternetConnection::sendDataToBlynk(
         Blynk.virtualWrite(V44, microphoneController.sensorD.leq);
         Blynk.virtualWrite(V45, microphoneController.sensorE.leq);
         Blynk.virtualWrite(V46, microphoneController.sensorF.leq);
+
+        bool isMicrophonesNan = isnan(microphoneController.sensorD.leq) &&
+                                isnan(microphoneController.sensorE.leq) &&
+                                isnan(microphoneController.sensorF.leq);
+        if (isMicrophonesNan)
+        {
+            Blynk.notify("Microphones is NaN");
+        }
 
         // set SDA/SCL status
         setI2CStatusVersion();
@@ -214,6 +223,9 @@ void InternetConnection::sendDataToBlynk(
         // WIFI info
         Blynk.virtualWrite(V39, "IP: " + WiFi.localIP().toString() + "|G: " + WiFi.gatewayIP().toString() + "|S: " + WiFi.subnetMask().toString() + "|DNS: " + WiFi.dnsIP().toString());
         Blynk.virtualWrite(V40, WiFi.RSSI());
+
+        Blynk.run();
+        delay(1000);
 
         Serial.println("Sending data to Blynk - DONE");
     }

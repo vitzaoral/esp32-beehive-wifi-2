@@ -12,7 +12,7 @@
 class InternetConnection
 {
 public:
-  void initialize();
+  InternetConnection();
   bool isAlarm;
   bool initializeConnection();
   void disconnect();
