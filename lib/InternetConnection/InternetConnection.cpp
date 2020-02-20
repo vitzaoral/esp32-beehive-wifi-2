@@ -173,12 +173,12 @@ void InternetConnection::sendDataToBlynk(
     if (Blynk.connected())
     {
         // meteo data A
-        Blynk.virtualWrite(V4, meteoData.sensorA.humidity);
-        Blynk.virtualWrite(V5, meteoData.sensorA.temperature);
+        Blynk.virtualWrite(V4, meteoData.sensorD.humidity);
+        Blynk.virtualWrite(V5, meteoData.sensorD.temperature);
 
         // meteo data B
-        Blynk.virtualWrite(V6, meteoData.sensorB.humidity);
-        Blynk.virtualWrite(V7, meteoData.sensorB.temperature);
+        Blynk.virtualWrite(V6, meteoData.sensorE.humidity);
+        Blynk.virtualWrite(V7, meteoData.sensorE.temperature);
 
         // solar power data
         Blynk.virtualWrite(V8, powerController.sensor_solar.loadVoltage);
@@ -195,8 +195,8 @@ void InternetConnection::sendDataToBlynk(
         Blynk.virtualWrite(V2, percent);
 
         // meteo data C
-        Blynk.virtualWrite(V12, meteoData.sensorC.humidity);
-        Blynk.virtualWrite(V13, meteoData.sensorC.temperature);
+        Blynk.virtualWrite(V12, meteoData.sensorF.humidity);
+        Blynk.virtualWrite(V13, meteoData.sensorF.temperature);
 
         // microphones
         Blynk.virtualWrite(V44, microphoneController.sensorD.leq);
@@ -250,13 +250,13 @@ void InternetConnection::setI2CStatusVersion()
 
 void InternetConnection::setMagneticLockControllerDataToBlynk(MagneticLockController magneticLockController)
 {
-    Blynk.virtualWrite(V19, magneticLockController.sensorA.status);
-    Blynk.virtualWrite(V20, magneticLockController.sensorB.status);
-    Blynk.virtualWrite(V21, magneticLockController.sensorC.status);
+    Blynk.virtualWrite(V19, magneticLockController.sensorD.status);
+    Blynk.virtualWrite(V20, magneticLockController.sensorE.status);
+    Blynk.virtualWrite(V21, magneticLockController.sensorF.status);
 
-    Blynk.virtualWrite(V14, magneticLockController.sensorRoofA.status);
-    Blynk.virtualWrite(V15, magneticLockController.sensorRoofB.status);
-    Blynk.virtualWrite(V16, magneticLockController.sensorRoofC.status);
+    Blynk.virtualWrite(V14, magneticLockController.sensorRoofD.status);
+    Blynk.virtualWrite(V15, magneticLockController.sensorRoofE.status);
+    Blynk.virtualWrite(V16, magneticLockController.sensorRoofF.status);
 
     setAlarmInfoToBlynk();
 }

@@ -4,14 +4,14 @@
 #include <Arduino.h>
 
 // bottoms
-#define LOCK_A_PIN 25
-#define LOCK_B_PIN 26
-#define LOCK_C_PIN 27
+#define LOCK_D_PIN 25
+#define LOCK_E_PIN 26
+#define LOCK_F_PIN 27
 
 // roofs
-#define LOCK_ROOF_A_PIN 35
-#define LOCK_ROOF_B_PIN 32
-#define LOCK_ROOF_C_PIN 33
+#define LOCK_ROOF_D_PIN 35
+#define LOCK_ROOF_E_PIN 32
+#define LOCK_ROOF_F_PIN 33
 
 struct LockData
 {
@@ -25,14 +25,14 @@ public:
   MagneticLockController();
   
   // bottoms
-  LockData sensorA;
-  LockData sensorB;
-  LockData sensorC;
+  LockData sensorD;
+  LockData sensorE;
+  LockData sensorF;
 
   // roofs
-  LockData sensorRoofA;
-  LockData sensorRoofB;
-  LockData sensorRoofC;
+  LockData sensorRoofD;
+  LockData sensorRoofE;
+  LockData sensorRoofF;
 
   void setData();
   bool isOk();

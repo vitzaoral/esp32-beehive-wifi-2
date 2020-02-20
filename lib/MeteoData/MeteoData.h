@@ -5,9 +5,9 @@
 #include <Adafruit_Sensor.h>
 #include <Adafruit_SHT31.h>
 
-#define SENSOR_A_PIN 17
-#define SENSOR_B_PIN 16
-#define SENSOR_C_PIN 4
+#define SENSOR_D_PIN 17
+#define SENSOR_E_PIN 16
+#define SENSOR_F_PIN 4
 
 struct TempAndHumidity
 {
@@ -18,9 +18,9 @@ struct TempAndHumidity
 class MeteoData
 {
   public:
-    TempAndHumidity sensorA;
-    TempAndHumidity sensorB;
-    TempAndHumidity sensorC;
+    TempAndHumidity sensorD;
+    TempAndHumidity sensorE;
+    TempAndHumidity sensorF;
     MeteoData();
     void initializeSensors();
     void setData();

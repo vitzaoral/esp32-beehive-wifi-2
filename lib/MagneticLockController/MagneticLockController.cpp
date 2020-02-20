@@ -3,33 +3,33 @@
 MagneticLockController::MagneticLockController()
 {
     // bottoms
-    pinMode(LOCK_A_PIN, INPUT);
-    pinMode(LOCK_B_PIN, INPUT);
-    pinMode(LOCK_C_PIN, INPUT);
+    pinMode(LOCK_D_PIN, INPUT);
+    pinMode(LOCK_E_PIN, INPUT);
+    pinMode(LOCK_F_PIN, INPUT);
 
     // roofs
-    pinMode(LOCK_ROOF_A_PIN, INPUT);
-    pinMode(LOCK_ROOF_B_PIN, INPUT);
-    pinMode(LOCK_ROOF_C_PIN, INPUT);
+    pinMode(LOCK_ROOF_D_PIN, INPUT);
+    pinMode(LOCK_ROOF_E_PIN, INPUT);
+    pinMode(LOCK_ROOF_F_PIN, INPUT);
 }
 
 void MagneticLockController::setData()
 {
     // bottoms
-    Serial.print("Magnetic lock A: ");
-    setSensorData(&sensorA, LOCK_A_PIN);
-    Serial.print("Magnetic lock B: ");
-    setSensorData(&sensorB, LOCK_B_PIN);
-    Serial.print("Magnetic lock C: ");
-    setSensorData(&sensorC, LOCK_C_PIN);
+    Serial.print("Magnetic lock D: ");
+    setSensorData(&sensorD, LOCK_D_PIN);
+    Serial.print("Magnetic lock E: ");
+    setSensorData(&sensorE, LOCK_E_PIN);
+    Serial.print("Magnetic lock F: ");
+    setSensorData(&sensorF, LOCK_F_PIN);
 
     // Roofs
-    Serial.print("Magnetic roof lock A: ");
-    setSensorData(&sensorRoofA, LOCK_ROOF_A_PIN);
-    Serial.print("Magnetic roof lock B: ");
-    setSensorData(&sensorRoofB, LOCK_ROOF_B_PIN);
-    Serial.print("Magnetic roof lock C: ");
-    setSensorData(&sensorRoofC, LOCK_ROOF_C_PIN);
+    Serial.print("Magnetic roof lock D: ");
+    setSensorData(&sensorRoofD, LOCK_ROOF_D_PIN);
+    Serial.print("Magnetic roof lock E: ");
+    setSensorData(&sensorRoofE, LOCK_ROOF_E_PIN);
+    Serial.print("Magnetic roof lock F: ");
+    setSensorData(&sensorRoofF, LOCK_ROOF_F_PIN);
 }
 
 void MagneticLockController::setSensorData(LockData *data, int pin)
@@ -51,22 +51,22 @@ void MagneticLockController::setSensorData(LockData *data, int pin)
 // Check if all lockers are locked
 bool MagneticLockController::isOk()
 {
-    return sensorA.locked &&
-           sensorB.locked &&
-           sensorC.locked &&
-           sensorRoofA.locked &&
-           sensorRoofB.locked &&
-           sensorRoofC.locked;
+    return sensorD.locked &&
+           sensorE.locked &&
+           sensorF.locked &&
+           sensorRoofD.locked &&
+           sensorRoofE.locked &&
+           sensorRoofF.locked;
 }
 
 // alarm message for alarm notification
 String MagneticLockController::getAlarmMessage()
 {
     String message = "";
-    return String(sensorA.locked ? "" : "A") +
-           String(sensorB.locked ? "" : "B") +
-           String(sensorC.locked ? "" : "C") +
-           String(sensorRoofA.locked ? "" : "rA") +
-           String(sensorRoofB.locked ? "" : "rB") +
-           String(sensorRoofC.locked ? "" : "rC");
+    return String(sensorD.locked ? "" : "D") +
+           String(sensorE.locked ? "" : "E") +
+           String(sensorF.locked ? "" : "F") +
+           String(sensorRoofD.locked ? "" : "r-D") +
+           String(sensorRoofE.locked ? "" : "r-E") +
+           String(sensorRoofF.locked ? "" : "r-F");
 }
