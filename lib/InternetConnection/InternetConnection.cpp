@@ -203,6 +203,9 @@ void InternetConnection::sendDataToBlynk(
         Blynk.virtualWrite(V45, microphoneController.sensorE.leq);
         Blynk.virtualWrite(V46, microphoneController.sensorF.leq);
 
+        // microphones - spectrum analyzer
+        // TODO: moc dat, kam posilat..? Mozna zkusit jen pro jeden mic...
+
         // set SDA/SCL status
         setI2CStatusVersion();
 

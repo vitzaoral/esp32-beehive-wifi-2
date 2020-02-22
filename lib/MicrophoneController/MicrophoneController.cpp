@@ -1,193 +1,210 @@
 #include "MicrophoneController.h"
 
-//
-// IIR Filters
-//
+unsigned int sampling_period_us;
+unsigned long microseconds;
+byte peak[] = {0, 0, 0, 0, 0, 0, 0};
+double vReal[SAMPLES];
+double vImag[SAMPLES];
+unsigned long newTime, oldTime;
 
-//
-// Equalizer IIR filters to flatten microphone frequency response
-// See respective .m file for filter design. Fs = 48Khz.
-//
+// https://github.com/kosme/arduinoFFT, in IDE, Sketch, Include Library, Manage Library, then search for FFT
+arduinoFFT FFT = arduinoFFT();
 
-// TDK/InvenSense INMP441
-// Datasheet: https://www.invensense.com/wp-content/uploads/2015/02/INMP441.pdf
-const double INMP441_B[] = {1.00198, -1.99085, 0.98892};
-const double INMP441_A[] = {1.0, -1.99518, 0.99518};
-IIR_FILTER INMP441(INMP441_B, INMP441_A);
-
-//
-// A-weighting 6th order IIR Filter, Fs = 48KHz
-// (By Dr. Matt L., Source: https://dsp.stackexchange.com/a/36122)
-//
-const double A_weighting_B[] = {0.169994948147430, 0.280415310498794, -1.120574766348363, 0.131562559965936, 0.974153561246036, -0.282740857326553, -0.152810756202003};
-const double A_weighting_A[] = {1.0, -2.12979364760736134, 0.42996125885751674, 1.62132698199721426, -0.96669962900852902, 0.00121015844426781, 0.04400300696788968};
-IIR_FILTER A_weighting(A_weighting_B, A_weighting_A);
-
-// Data we push to 'samples_queue'
-struct samples_queue_t
-{
-    // Sum of squares of mic samples, after Equalizer filter
-    IIR_ACCU_T sum_sqr_SPL;
-    // Sum of squares of weighted mic samples
-    IIR_ACCU_T sum_sqr_weighted;
-};
-int32_t samples[SAMPLES_SHORT];
-QueueHandle_t samples_queue;
+const int sampleWindow = 50; // Sample window width in mS (50 mS = 20Hz)
+unsigned int sample;
 
 MicrophoneController::MicrophoneController()
 {
-    pinMode(MIC_1_CHANEL, OUTPUT);
-    pinMode(MIC_2_CHANEL, OUTPUT);
-    pinMode(MIC_3_CHANEL, OUTPUT);
-    delay(500);
-
-    MicrophoneController::mic_i2s_install();
-    MicrophoneController::mic_i2s_set_pin();
-
+    sampling_period_us = round(1000000 * (1.0 / SAMPLING_FREQUENCY));
     Serial.println("Microphones I2S setup DONE");
 }
 
 void MicrophoneController::setData()
 {
-    // MIC 1
-    digitalWrite(MIC_1_CHANEL, LOW);
-    digitalWrite(MIC_2_CHANEL, HIGH);
-    digitalWrite(MIC_3_CHANEL, HIGH);
+    Serial.print("MIC D: ");
+    setSensorDecibelData(&sensorD, MIC_PIN_D);
+    Serial.print(sensorD.leq);
+    Serial.println(" dB");
 
-    delay(500);
-    i2s_start(I2S_PORT);
-    delay(500);
+    Serial.print("MIC E: ");
+    setSensorDecibelData(&sensorE, MIC_PIN_E);
+    Serial.print(sensorE.leq);
+    Serial.println(" dB");
 
-    Serial.print("First MIC: ");
-    setSensorData(&sensorD);
-    i2s_stop(I2S_PORT);
+    Serial.print("MIC F: ");
+    setSensorDecibelData(&sensorF, MIC_PIN_F);
+    Serial.print(sensorF.leq);
+    Serial.println(" dB");
 
-    // MIC 2
-    digitalWrite(MIC_1_CHANEL, HIGH);
-    digitalWrite(MIC_2_CHANEL, LOW);
-    digitalWrite(MIC_3_CHANEL, HIGH);
-
-    delay(500);
-    i2s_start(I2S_PORT);
-    delay(500);
-
-    Serial.print("Second MIC: ");
-    setSensorData(&sensorE);
-    i2s_stop(I2S_PORT);
-
-    // MIC 3
-    digitalWrite(MIC_1_CHANEL, HIGH);
-    digitalWrite(MIC_2_CHANEL, HIGH);
-    digitalWrite(MIC_3_CHANEL, LOW);
-
-    delay(500);
-    i2s_start(I2S_PORT);
-    delay(500);
-
-    Serial.print("Third MIC: ");
-    setSensorData(&sensorF);
-    i2s_stop(I2S_PORT);
+    Serial.print("Spectrum Analyzer MIC D: ");
+    spectrumAnalyzer(&sensorD, MIC_PIN_D);
+    Serial.print("Spectrum Analyzer MIC E: ");
+    spectrumAnalyzer(&sensorD, MIC_PIN_E);
+    Serial.print("Spectrum Analyzer MIC F: ");
+    spectrumAnalyzer(&sensorD, MIC_PIN_F);
 }
 
-// Rationale for separate task reading I2S is that IIR filter
-// processing cam be scheduled to different core on the ESP32
-// while i.e. the display is beeing updated...
-void MicrophoneController::setSensorData(MicrophoneData *data)
+void MicrophoneController::setSensorDecibelData(MicrophoneData *data, int microphonePin)
 {
-    //Discard first block, microphone may have startup time(i.e.INMP441 up to 83ms)
-    size_t bytes_read = 0;
-    i2s_read(I2S_PORT, &samples, SAMPLES_SHORT * sizeof(int32_t), &bytes_read, portMAX_DELAY);
+    int count = 50;
+    int num[count];
 
-    uint32_t Leq_cnt = 0;
-    IIR_ACCU_T Leq_sum_sqr = 0;
-
-    int count = 0;
-
-    while (true)
+    for (int i = 0; i < count; i++)
     {
-        //Serial.print(".");
-        IIR_ACCU_T sum_sqr_SPL = 0;
-        IIR_ACCU_T sum_sqr_weighted = 0;
-        samples_queue_t q;
-        int32_t sample;
-        IIR_BASE_T s;
+        num[i] = decibelMeter(microphonePin);
+    }
 
-        i2s_read(I2S_PORT, &samples, SAMPLES_SHORT * sizeof(int32_t), &bytes_read, portMAX_DELAY);
-        for (int i = 0; i < SAMPLES_SHORT; i++)
+    int n, i;
+    float sum = 0.0, avg;
+
+    n = sizeof(num) / sizeof(num[0]);
+    for (i = 0; i < n; i++)
+        sum += num[i];
+    avg = sum / n;
+    data->leq = avg;
+}
+
+int MicrophoneController::decibelMeter(int microphonePin)
+{
+    unsigned long startMillis = millis(); // Start of sample window
+    unsigned int peakToPeak = 0;          // peak-to-peak level
+
+    unsigned int signalMax = 0;
+    unsigned int signalMin = 4095; // 1024 for ESP8266, 4095 for ESP32 (12bit)
+
+    // collect data for 50 mS
+    while (millis() - startMillis < sampleWindow)
+    {
+        sample = analogRead(microphonePin);
+        if (sample < 4095) // toss out spurious readings
         {
-            sample = SAMPLE_CONVERT(samples[i]);
-            s = sample;
-            s = MIC_EQUALIZER.filter(s);
-            ACCU_SQR(sum_sqr_SPL, s);
-            s = WEIGHTING.filter(s);
-            ACCU_SQR(sum_sqr_weighted, s);
+            if (sample > signalMax)
+            {
+                signalMax = sample; // save just the max levels
+            }
+            else if (sample < signalMin)
+            {
+                signalMin = sample; // save just the min levels
+            }
         }
+    }
+    peakToPeak = signalMax - signalMin; // max - min = peak-peak amplitude
 
-        q.sum_sqr_SPL = sum_sqr_SPL;
-        q.sum_sqr_weighted = sum_sqr_weighted;
+    // Calibrate MIC - with some other mobile application/meter check dB compared to peakToPeak
+    // kalibrace viz. https://circuitdigest.com/microcontroller-projects/arduino-sound-level-measurement
+    // for example : 33dB -> 277, 39dB -> 279 etc.
 
-        // Calculate dB values relative to MIC_REF_AMPL and adjust for reference dB
-        double short_SPL_dB = MIC_OFFSET_DB + MIC_REF_DB + 20 * log10(sqrt(double(q.sum_sqr_SPL) / SAMPLES_SHORT) / MIC_REF_AMPL);
+    // 1. way to compute dB - regression https://www.socscistatistics.com/tests/regression/default.aspx
+    // compute ŷ a give to equation
+    // dB = (peakToPeak + 1376.82535) / 37.0636;
 
-        // In case of acoustic overload, report infinty Leq value
-        if (short_SPL_dB > MIC_OVERLOAD_DB)
-            Leq_sum_sqr = INFINITY;
+    // 2. way - take reference point 55dB => 326, then
+    // dB = 20 * log((double)peakToPeak / (double)326) + 55;
 
-        Leq_sum_sqr += q.sum_sqr_weighted;
-        Leq_cnt += SAMPLES_SHORT;
-        if (Leq_cnt >= SAMPLE_RATE * LEQ_PERIOD)
-        {
-            data->leq = MIC_OFFSET_DB + MIC_REF_DB + 20 * log10(sqrt(double(Leq_sum_sqr) / Leq_cnt) / MIC_REF_AMPL);
-            Leq_sum_sqr = 0;
-            Leq_cnt = 0;
-            printf("%s(%ds) : %.1f\n", LEQ_UNITS, LEQ_PERIOD, data->leq);
+    // 3. way - create function witch aproximate curve https://mycurvefit.com/
+    if (microphonePin == MIC_PIN_D)
+    {
+        return 75.79554 + (-87931970 - 75.79554) / (1 + pow((peakToPeak / 0.1467273), 1.953159));
+    }
+    if (microphonePin == MIC_PIN_E)
+    {
+        return 0; // TODO: kalibrace
+    }
+    if (microphonePin == MIC_PIN_F)
+    {
+        return 0; // TODO: kalibrace
+    }
+
+    return -1;
+}
+
+void MicrophoneController::spectrumAnalyzer(MicrophoneData *data, int microphonePin)
+{
+    for (int i = 0; i < SAMPLES; i++)
+    {
+        newTime = micros() - oldTime;
+        oldTime = newTime;
+        vReal[i] = analogRead(microphonePin); // A conversion takes about 1uS on an ESP32
+        vImag[i] = 0;
+        while (micros() < (newTime + sampling_period_us))
+        { /* do nothing to wait */
         }
+    }
+    FFT.Windowing(vReal, SAMPLES, FFT_WIN_TYP_HAMMING, FFT_FORWARD);
+    FFT.Compute(vReal, vImag, SAMPLES, FFT_FORWARD);
+    FFT.ComplexToMagnitude(vReal, vImag, SAMPLES);
 
-        count++;
+    for (int i = 2; i < (SAMPLES / 2); i++)
+    { // Don't use sample 0 and only first SAMPLES/2 are usable. Each array eleement represents a frequency and its value the amplitude.
+        if (vReal[i] > 2000)
+        { // Add a crude noise filter, 10 x amplitude or more
+            int dsize = (int)vReal[i] / amplitude;
 
-        if (count > 50)
+            if (i <= 2)
+            {
+                displayBand(0, dsize); // 125Hz
+                data->Hz125 = dsize;
+            }
+
+            if (i > 3 && i <= 5)
+            {
+                displayBand(1, dsize); // 250Hz
+                data->Hz250 = dsize;
+            }
+
+            if (i > 5 && i <= 7)
+            {
+                displayBand(2, dsize); // 500Hz
+                data->Hz500 = dsize;
+            }
+            if (i > 7 && i <= 15)
+            {
+                displayBand(3, dsize); // 1000Hz
+                data->Hz1000 = dsize;
+            }
+            if (i > 15 && i <= 30)
+            {
+                displayBand(4, dsize); // 2000Hz
+                data->Hz2000 = dsize;
+            }
+            if (i > 30 && i <= 53)
+            {
+                displayBand(5, dsize); // 4000Hz
+                data->Hz4000 = dsize;
+            }
+            if (i > 53 && i <= 200)
+            {
+                displayBand(6, dsize); // 8000Hz
+                data->Hz8000 = dsize;
+            }
+            if (i > 200)
+            {
+                displayBand(7, dsize); // 16000Hz
+                data->Hz16000 = dsize;
+            }
+        }
+    }
+    if (millis() % 4 == 0)
+    {
+        for (byte band = 0; band <= 6; band++)
         {
-            break;
+            if (peak[band] > 0)
+                peak[band] -= 1;
         }
     }
 }
 
-void MicrophoneController::mic_i2s_install()
+void MicrophoneController::displayBand(int band, int dsize)
 {
-    // Setup I2S to sample mono channel for SAMPLE_RATE * SAMPLE_BITS
-    // NOTE: Recent update to Arduino_esp32 (1.0.2 -> 1.0.3)
-    //       seems to have swapped ONLY_LEFT and ONLY_RIGHT channels
-    const i2s_config_t i2s_config = {
-        .mode = i2s_mode_t(I2S_MODE_MASTER | I2S_MODE_RX),
-        .sample_rate = SAMPLE_RATE,
-        .bits_per_sample = i2s_bits_per_sample_t(SAMPLE_BITS),
-        .channel_format = I2S_CHANNEL_FMT_ONLY_LEFT,
-        .communication_format = i2s_comm_format_t(I2S_COMM_FORMAT_I2S | I2S_COMM_FORMAT_I2S_MSB),
-        .intr_alloc_flags = ESP_INTR_FLAG_LEVEL1,
-        .dma_buf_count = DMA_BANKS,
-        .dma_buf_len = DMA_BANK_SIZE,
-        .use_apll = true,
-        .tx_desc_auto_clear = false,
-        .fixed_mclk = 0};
+    Serial.print(band);
+    Serial.print("-");
+    Serial.println(dsize);
 
-    i2s_driver_install(I2S_PORT, &i2s_config, 0, NULL);
-}
-
-void MicrophoneController::mic_i2s_set_pin()
-{
-    // I2S pin mapping
-    const i2s_pin_config_t pin_config = {
-        .bck_io_num = MIC_1_I2S_SCK,
-        .ws_io_num = MIC_1_I2S_WS,
-        .data_out_num = -1, // not used
-        .data_in_num = MIC_1_I2S_SD};
-
-    i2s_set_pin(I2S_PORT, &pin_config);
-
-    //FIXME: There is a known issue with esp-idf and sampling rates, see:
-    //       https://github.com/espressif/esp-idf/issues/2634
-    //       Update (when available) to the latest versions of esp-idf *should* fix it
-    //       In the meantime, the below line seems to set sampling rate at ~47999.992Hz
-    //       fifs_req=24576000, sdm0=149, sdm1=212, sdm2=5, odir=2 -> fifs_reached=24575996
-    // rtc_clk_apll_enable(1, 149, 212, 5, 2);
+    int dmax = 50;
+    if (dsize > dmax)
+        dsize = dmax;
+    if (dsize > peak[band])
+    {
+        peak[band] = dsize;
+    }
 }
