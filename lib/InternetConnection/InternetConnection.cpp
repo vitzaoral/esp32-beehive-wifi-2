@@ -203,14 +203,6 @@ void InternetConnection::sendDataToBlynk(
         Blynk.virtualWrite(V45, microphoneController.sensorE.leq);
         Blynk.virtualWrite(V46, microphoneController.sensorF.leq);
 
-        bool isMicrophonesNan = isnan(microphoneController.sensorD.leq) &&
-                                isnan(microphoneController.sensorE.leq) &&
-                                isnan(microphoneController.sensorF.leq);
-        if (isMicrophonesNan)
-        {
-            Blynk.notify("Microphones is NaN");
-        }
-
         // set SDA/SCL status
         setI2CStatusVersion();
 
