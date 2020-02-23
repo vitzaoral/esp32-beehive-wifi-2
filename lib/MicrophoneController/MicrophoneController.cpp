@@ -36,7 +36,7 @@ void MicrophoneController::setData()
     Serial.print(sensorF.leq);
     Serial.println(" dB");
 
-    // TODO:
+    // TODO: Spectrum Analyzer
     // Serial.print("Spectrum Analyzer MIC D: ");
     // spectrumAnalyzer(&sensorD, MIC_PIN_D);
     // Serial.print("Spectrum Analyzer MIC E: ");
@@ -47,7 +47,7 @@ void MicrophoneController::setData()
 
 void MicrophoneController::setSensorDecibelData(MicrophoneData *data, int microphonePin)
 {
-    int count = 50;
+    int count = 63; // ~ 5 sec
     int num[count];
 
     for (int i = 0; i < count; i++)
@@ -90,6 +90,7 @@ int MicrophoneController::decibelMeter(int microphonePin)
         }
     }
     peakToPeak = signalMax - signalMin; // max - min = peak-peak amplitude
+                                        // Serial.println(peakToPeak);
 
     // Calibrate MIC - with some other mobile application/meter check dB compared to peakToPeak
     // kalibrace viz. https://circuitdigest.com/microcontroller-projects/arduino-sound-level-measurement
@@ -104,20 +105,19 @@ int MicrophoneController::decibelMeter(int microphonePin)
 
     // 3. way - create function witch aproximate curve https://mycurvefit.com/
     // it seems that same equation for all mics is good for now..
-    Serial.println(peakToPeak);
-    return 75.79554 + (-87931970 - 75.79554) / (1 + pow((peakToPeak / 0.1467273), 1.953159));
+    return 102.4139 + (-2494418.4139) / (1 + pow((peakToPeak / 0.00000000000000003531231), 0.2534998));
 
     // if (microphonePin == MIC_PIN_D)
     // {
-    //     return 75.79554 + (-87931970 - 75.79554) / (1 + pow((peakToPeak / 0.1467273), 1.953159));
+    //     TODO
     // }
     // if (microphonePin == MIC_PIN_E)
     // {
-    //     return 75.79554 + (-87931970 - 75.79554) / (1 + pow((peakToPeak / 0.1467273), 1.953159));
+    //     TODO
     // }
     // if (microphonePin == MIC_PIN_F)
     // {
-    //     return 75.79554 + (-87931970 - 75.79554) / (1 + pow((peakToPeak / 0.1467273), 1.953159));
+    //     TODO
     // }
 }
 
