@@ -10,7 +10,7 @@
 
 // roofs
 #define LOCK_ROOF_D_PIN 14
-#define LOCK_ROOF_E_PIN 12
+#define LOCK_ROOF_E_PIN 18
 #define LOCK_ROOF_F_PIN 13
 
 struct LockData

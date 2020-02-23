@@ -1,20 +1,37 @@
 #include "MagneticLockController.h"
 
+// TODO: stresni zamky na delsim kabelu - trva nez jim dojde ze jsou OFF..zkusit nejaky odpor...?
+
 MagneticLockController::MagneticLockController()
 {
-    // bottoms
-    pinMode(LOCK_D_PIN, INPUT);
-    pinMode(LOCK_E_PIN, INPUT);
-    pinMode(LOCK_F_PIN, INPUT);
-
-    // roofs
-    pinMode(LOCK_ROOF_D_PIN, INPUT);
-    pinMode(LOCK_ROOF_E_PIN, INPUT);
-    pinMode(LOCK_ROOF_F_PIN, INPUT);
 }
 
 void MagneticLockController::setData()
 {
+    // clear "wires memory"
+    // on long cables it works slowly, so set tu LOW and check if is HIGH
+    pinMode(LOCK_D_PIN, OUTPUT);
+    pinMode(LOCK_E_PIN, OUTPUT);
+    pinMode(LOCK_F_PIN, OUTPUT);
+    pinMode(LOCK_ROOF_D_PIN, OUTPUT);
+    pinMode(LOCK_ROOF_E_PIN, OUTPUT);
+    pinMode(LOCK_ROOF_F_PIN, OUTPUT);
+
+    digitalWrite(LOCK_D_PIN, LOW);
+    digitalWrite(LOCK_E_PIN, LOW);
+    digitalWrite(LOCK_F_PIN, LOW);
+    digitalWrite(LOCK_ROOF_D_PIN, LOW);
+    digitalWrite(LOCK_ROOF_E_PIN, LOW);
+    digitalWrite(LOCK_ROOF_F_PIN, LOW);
+
+    delay(200);
+    pinMode(LOCK_D_PIN, INPUT);
+    pinMode(LOCK_E_PIN, INPUT);
+    pinMode(LOCK_F_PIN, INPUT);
+    pinMode(LOCK_ROOF_D_PIN, INPUT);
+    pinMode(LOCK_ROOF_E_PIN, INPUT);
+    pinMode(LOCK_ROOF_F_PIN, INPUT);
+
     // bottoms
     Serial.print("Magnetic lock D: ");
     setSensorData(&sensorD, LOCK_D_PIN);
