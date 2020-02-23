@@ -104,8 +104,9 @@ int MicrophoneController::decibelMeter(int microphonePin)
 
     // 3. way - create function witch aproximate curve https://mycurvefit.com/
     // it seems that same equation for all mics is good for now..
-    return 75.79554 + (-87931970 - 75.79554) / (1 + pow((peakToPeak / 0.1467273), 1.953159)); 
-    
+    Serial.println(peakToPeak);
+    return 75.79554 + (-87931970 - 75.79554) / (1 + pow((peakToPeak / 0.1467273), 1.953159));
+
     // if (microphonePin == MIC_PIN_D)
     // {
     //     return 75.79554 + (-87931970 - 75.79554) / (1 + pow((peakToPeak / 0.1467273), 1.953159));

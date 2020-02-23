@@ -13,7 +13,7 @@ void sendDataToInternet();
 void checkMagneticLockAlarm();
 void checkMicrophones();
 
-Ticker timerSendDataToInternet(sendDataToInternet, 273000);  // 4.55 min 2 = 73000ms (15sec to microphones)
+Ticker timerSendDataToInternet(sendDataToInternet, 273000);  // 4.55 min = 273000ms (15sec to microphones)
 Ticker timerMagneticLockAlarm(checkMagneticLockAlarm, 4321); // 4 sec
 Ticker timerMicrophoneController(checkMicrophones, 281000);  // 4 TODO..
 

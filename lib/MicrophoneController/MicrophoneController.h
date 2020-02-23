@@ -8,9 +8,9 @@
 #define SAMPLES 512              // Must be a power of 2
 #define SAMPLING_FREQUENCY 40000 // Hz, must be 40000 or less due to ADC conversion time. Determines maximum frequency that can be analysed by the FFT Fmax=sampleF/2.
 #define amplitude 250            // Depending on your audio source level, you may need to increase this value
-#define MIC_PIN_D 14
-#define MIC_PIN_E 12
-#define MIC_PIN_F 13
+#define MIC_PIN_D 32
+#define MIC_PIN_E 33
+#define MIC_PIN_F 35
 
 struct MicrophoneData
 {
