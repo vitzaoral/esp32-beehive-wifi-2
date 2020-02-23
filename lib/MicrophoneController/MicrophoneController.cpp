@@ -36,12 +36,13 @@ void MicrophoneController::setData()
     Serial.print(sensorF.leq);
     Serial.println(" dB");
 
-    Serial.print("Spectrum Analyzer MIC D: ");
-    spectrumAnalyzer(&sensorD, MIC_PIN_D);
-    Serial.print("Spectrum Analyzer MIC E: ");
-    spectrumAnalyzer(&sensorD, MIC_PIN_E);
-    Serial.print("Spectrum Analyzer MIC F: ");
-    spectrumAnalyzer(&sensorD, MIC_PIN_F);
+    // TODO:
+    // Serial.print("Spectrum Analyzer MIC D: ");
+    // spectrumAnalyzer(&sensorD, MIC_PIN_D);
+    // Serial.print("Spectrum Analyzer MIC E: ");
+    // spectrumAnalyzer(&sensorD, MIC_PIN_E);
+    // Serial.print("Spectrum Analyzer MIC F: ");
+    // spectrumAnalyzer(&sensorD, MIC_PIN_F);
 }
 
 void MicrophoneController::setSensorDecibelData(MicrophoneData *data, int microphonePin)
@@ -102,20 +103,21 @@ int MicrophoneController::decibelMeter(int microphonePin)
     // dB = 20 * log((double)peakToPeak / (double)326) + 55;
 
     // 3. way - create function witch aproximate curve https://mycurvefit.com/
-    if (microphonePin == MIC_PIN_D)
-    {
-        return 75.79554 + (-87931970 - 75.79554) / (1 + pow((peakToPeak / 0.1467273), 1.953159));
-    }
-    if (microphonePin == MIC_PIN_E)
-    {
-        return 0; // TODO: kalibrace
-    }
-    if (microphonePin == MIC_PIN_F)
-    {
-        return 0; // TODO: kalibrace
-    }
-
-    return -1;
+    // it seems that same equation for all mics is good for now..
+    return 75.79554 + (-87931970 - 75.79554) / (1 + pow((peakToPeak / 0.1467273), 1.953159)); 
+    
+    // if (microphonePin == MIC_PIN_D)
+    // {
+    //     return 75.79554 + (-87931970 - 75.79554) / (1 + pow((peakToPeak / 0.1467273), 1.953159));
+    // }
+    // if (microphonePin == MIC_PIN_E)
+    // {
+    //     return 75.79554 + (-87931970 - 75.79554) / (1 + pow((peakToPeak / 0.1467273), 1.953159));
+    // }
+    // if (microphonePin == MIC_PIN_F)
+    // {
+    //     return 75.79554 + (-87931970 - 75.79554) / (1 + pow((peakToPeak / 0.1467273), 1.953159));
+    // }
 }
 
 void MicrophoneController::spectrumAnalyzer(MicrophoneData *data, int microphonePin)
