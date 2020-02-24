@@ -47,7 +47,7 @@ void MicrophoneController::setData()
 
 void MicrophoneController::setSensorDecibelData(MicrophoneData *data, int microphonePin)
 {
-    int count = 63; // ~ 5 sec
+    int count = 120; // ~ 10 sec
     int num[count];
 
     for (int i = 0; i < count; i++)
@@ -105,20 +105,7 @@ int MicrophoneController::decibelMeter(int microphonePin)
 
     // 3. way - create function witch aproximate curve https://mycurvefit.com/
     // it seems that same equation for all mics is good for now..
-    return 102.4139 + (-2494418.4139) / (1 + pow((peakToPeak / 0.00000000000000003531231), 0.2534998));
-
-    // if (microphonePin == MIC_PIN_D)
-    // {
-    //     TODO
-    // }
-    // if (microphonePin == MIC_PIN_E)
-    // {
-    //     TODO
-    // }
-    // if (microphonePin == MIC_PIN_F)
-    // {
-    //     TODO
-    // }
+    return 66.36645 + (-80867760 - 66.36645)/(1 + pow((peakToPeak/10.88287), 8.387665));
 }
 
 void MicrophoneController::spectrumAnalyzer(MicrophoneData *data, int microphonePin)

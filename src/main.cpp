@@ -13,9 +13,8 @@ void sendDataToInternet();
 void checkMagneticLockAlarm();
 void checkMicrophones();
 
-Ticker timerSendDataToInternet(sendDataToInternet, 273000);  // 4.55 min = 273000ms (15sec to microphones)
+Ticker timerSendDataToInternet(sendDataToInternet, 273000);  // 4.3 min = 260000ms ( + 30sec to microphones, so about 5 minutes to ticker)
 Ticker timerMagneticLockAlarm(checkMagneticLockAlarm, 4321); // 4 sec
-Ticker timerMicrophoneController(checkMicrophones, 281000);  // 4 TODO..
 
 // alarm section
 void sendDataToBlynkIfAlarm();
@@ -48,7 +47,6 @@ void loop()
   timerSendDataToInternet.update();
   timerMagneticLockAlarm.update();
   timerSendDataToBlynkIfAlarm.update();
-  timerMicrophoneController.update();
 
   connection.blynkRunIfAlarm();
 }
@@ -58,7 +56,12 @@ void sendDataToInternet()
   Serial.println("Setting sensors data");
   meteoData.setData();
   powerController.setData();
-  microphoneController.setData();
+
+  if (!connection.isAlarm)
+  {
+    // takes 30 sec, only without alarm..
+    microphoneController.setData();
+  }
   // gyroscope and magnetic locks data are set in other timer more often, so we have actual data
 
   Serial.println("Start initialize Blynk connection");
@@ -99,9 +102,4 @@ void checkMagneticLockAlarm()
 void sendDataToBlynkIfAlarm()
 {
   connection.setMagneticLockControllerDataToBlynkIfAlarm(magneticLockController);
-}
-
-void checkMicrophones()
-{
-  microphoneController.setData();
 }

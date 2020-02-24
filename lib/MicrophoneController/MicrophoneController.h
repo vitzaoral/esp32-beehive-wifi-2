@@ -45,7 +45,8 @@ private:
 
 #endif
 
-// FIRST MIC CALIBRATION VALUES
+// MIC CALIBRATIONS, on 36dB -> adc = 62
+// MIC CALIBRATION VALUES
 // dB -> peakToPeak value
 //  39                 52.5
 //  43                 57
@@ -56,9 +57,3 @@ private:
 //  69                589
 //  70                668
 //  74               1043
-
-// SECOND MIC CALIBRATIONS VALUES
-// dB -> peakToPeak value
-
-// THIRD MIC CALIBRATIONS VALUES
-// dB -> peakToPeak value
