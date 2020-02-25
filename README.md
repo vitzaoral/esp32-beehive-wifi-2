@@ -26,12 +26,15 @@ struct Settings
 
 ### Currents list:
 
-* [ESP32 WROOM-32](https://www.aliexpress.com/item/ESP32-ESP-32-ESP32S-ESP-32S-CP2102-Wireless-WiFi-Bluetooth-Development-Board-Micro-USB-Dual-Core/32867696371.html)
-* [SHT30 digital temperature/humidity sensor](https://www.aliexpress.com/item/32962846003.html)
-* [INA219 sensor](https://www.aliexpress.com/item/32846796535.html)
-* [INMP441 microphone](https://www.aliexpress.com/item/32961274528.html)
-* [Magnetic contact sensor](https://www.aliexpress.com/item/32840447389.html)
-* Solar panel 12V with battery and solar charger or other power supply
+* [ESP32-WROOM-32U](https://www.aliexpress.com/item/4000103411061.html)
+* 3x [SHT30 digital temperature/humidity sensor](https://www.aliexpress.com/item/32962846003.html)
+* 2x [INA219 sensor](https://www.aliexpress.com/item/32846796535.html)
+* 3x [GY-MAX4466 microphone](https://www.aliexpress.com/item/32974988349.html)
+* 3x [Magnetic contact sensor](https://www.aliexpress.com/item/32840447389.html)
+* [12V MPPT Solar Panel Controller for 18650 Battery](https://www.aliexpress.com/item/32947501783.html)
+* 1x - 4x [3.7v 3400 mAh 18650 Lithium battery](https://www.aliexpress.com/item/32807032859.html)
+* Solar panel 12V 12W (or 2x [6V 6W panels](https://www.aliexpress.com/item/32901764415.html) in [series](http://sunbeam-bd.blogspot.com/p/blog-page_26.html))
+* 3x 9 pins COM cabels and some male/female connectors
 
 ### Save battery power:
 * Set CPU frequency to 30% (80Mhz) - *setCpuFrequencyMhz(80);*
@@ -41,6 +44,16 @@ struct Settings
 
 ### Schema:
 ![Schema](https://github.com/vitzaoral/esp32-beehive-wifi-2/blob/master/schema/schema.png)
+
+![Circuit](https://github.com/vitzaoral/esp32-beehive-wifi-2/blob/master/schema/IMG_9549.jpg)
+
+![Circuit](https://github.com/vitzaoral/esp32-beehive-wifi-2/blob/master/schema/IMG_9550.jpg)
+
+![Circuit](https://github.com/vitzaoral/esp32-beehive-wifi-2/blob/master/schema/IMG_9551.jpg)
+
+![Circuit](https://github.com/vitzaoral/esp32-beehive-wifi-2/blob/master/schema/IMG_9555.jpg)
+
+![Circuit](https://github.com/vitzaoral/esp32-beehive-wifi-2/blob/master/schema/IMG_9556.jpg)
 
 ### Powering 5V -> 3.3V:
 3v3 regulator - https://randomnerdtutorials.com/esp8266-voltage-regulator-lipo-and-li-ion-batteries/
