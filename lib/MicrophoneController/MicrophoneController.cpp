@@ -24,17 +24,17 @@ void MicrophoneController::setData()
     Serial.print("MIC D: ");
     setSensorDecibelData(&sensorD, MIC_PIN_D);
     Serial.print(sensorD.leq);
-    Serial.println(" dB");
+    Serial.println(" ADC");
 
     Serial.print("MIC E: ");
     setSensorDecibelData(&sensorE, MIC_PIN_E);
     Serial.print(sensorE.leq);
-    Serial.println(" dB");
+    Serial.println(" ADC");
 
     Serial.print("MIC F: ");
     setSensorDecibelData(&sensorF, MIC_PIN_F);
     Serial.print(sensorF.leq);
-    Serial.println(" dB");
+    Serial.println(" ADC");
 
     // TODO: Spectrum Analyzer
     // Serial.print("Spectrum Analyzer MIC D: ");
@@ -47,7 +47,7 @@ void MicrophoneController::setData()
 
 void MicrophoneController::setSensorDecibelData(MicrophoneData *data, int microphonePin)
 {
-    int count = 120; // ~ 10 sec
+    int count = 120; // 120 ~ 10 sec
     int num[count];
 
     for (int i = 0; i < count; i++)
@@ -105,7 +105,10 @@ int MicrophoneController::decibelMeter(int microphonePin)
 
     // 3. way - create function witch aproximate curve https://mycurvefit.com/
     // it seems that same equation for all mics is good for now..
-    return 66.36645 + (-80867760 - 66.36645)/(1 + pow((peakToPeak/10.88287), 8.387665));
+   //return 66.36645 + (-80867760 - 66.36645)/(1 + pow((peakToPeak/10.88287), 8.387665));
+
+   // NOT WORKING, DEPENDS ON BATERY ETCC...USING JUST ADC VALUES...
+   return peakToPeak;
 }
 
 void MicrophoneController::spectrumAnalyzer(MicrophoneData *data, int microphonePin)
