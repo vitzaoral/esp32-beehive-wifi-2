@@ -190,8 +190,8 @@ void InternetConnection::sendDataToBlynk(
         Blynk.virtualWrite(V42, powerController.sensor_battery.current_mA);
         Blynk.virtualWrite(V43, powerController.sensor_battery.power_mW);
 
-        // 3100mV is minimum value, 4204mV is maximum value, difference is 1104mV
-        int percent = ((powerController.sensor_battery.loadVoltage - 3.1) / 1.104) * 100.0;
+        // 2750mV is minimum value, 4204mV is maximum value, difference is 1454
+        int percent = ((powerController.sensor_battery.loadVoltage - 2.75) / 1.454) * 100.0;
         Blynk.virtualWrite(V2, percent);
 
         // meteo data C
