@@ -172,11 +172,11 @@ void InternetConnection::sendDataToBlynk(
     // create data to send to Blynk
     if (Blynk.connected())
     {
-        // meteo data A
+        // meteo data D
         Blynk.virtualWrite(V4, meteoData.sensorD.humidity);
         Blynk.virtualWrite(V5, meteoData.sensorD.temperature);
 
-        // meteo data B
+        // meteo data E
         Blynk.virtualWrite(V6, meteoData.sensorE.humidity);
         Blynk.virtualWrite(V7, meteoData.sensorE.temperature);
 
@@ -194,14 +194,14 @@ void InternetConnection::sendDataToBlynk(
         int percent = ((powerController.sensor_battery.loadVoltage - 2.75) / 1.454) * 100.0;
         Blynk.virtualWrite(V2, percent);
 
-        // meteo data C
-        Blynk.virtualWrite(V12, meteoData.sensorF.humidity);
-        Blynk.virtualWrite(V13, meteoData.sensorF.temperature);
+        // meteo data F
+        //Blynk.virtualWrite(V12, meteoData.sensorF.humidity);
+        //Blynk.virtualWrite(V13, meteoData.sensorF.temperature);
 
         // microphones
         Blynk.virtualWrite(V44, microphoneController.sensorD.leq);
         Blynk.virtualWrite(V45, microphoneController.sensorE.leq);
-        Blynk.virtualWrite(V46, microphoneController.sensorF.leq);
+        //Blynk.virtualWrite(V46, microphoneController.sensorF.leq);
 
         // microphones - spectrum analyzer
         // TODO: moc dat, kam posilat..? Mozna zkusit jen pro jeden mic...
@@ -247,11 +247,11 @@ void InternetConnection::setMagneticLockControllerDataToBlynk(MagneticLockContro
 {
     Blynk.virtualWrite(V19, magneticLockController.sensorD.status);
     Blynk.virtualWrite(V20, magneticLockController.sensorE.status);
-    Blynk.virtualWrite(V21, magneticLockController.sensorF.status);
+    //Blynk.virtualWrite(V21, magneticLockController.sensorF.status);
 
     Blynk.virtualWrite(V14, magneticLockController.sensorRoofD.status);
     Blynk.virtualWrite(V15, magneticLockController.sensorRoofE.status);
-    Blynk.virtualWrite(V16, magneticLockController.sensorRoofF.status);
+    //Blynk.virtualWrite(V16, magneticLockController.sensorRoofF.status);
 
     setAlarmInfoToBlynk();
 }
