@@ -34,10 +34,10 @@ void MicrophoneController::setData()
     Serial.println(" ADC");
 
     // F
-    // Serial.print("MIC F: ");
-    // setSensorDecibelData(&sensorF, MIC_PIN_F);
-    // Serial.print(sensorF.leq);
-    // Serial.println(" ADC");
+    Serial.print("MIC F: ");
+    setSensorDecibelData(&sensorF, MIC_PIN_F);
+    Serial.print(sensorF.leq);
+    Serial.println(" ADC");
 
     // TODO: Spectrum Analyzer
     // Serial.print("Spectrum Analyzer MIC D: ");

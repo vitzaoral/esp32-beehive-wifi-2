@@ -8,10 +8,11 @@ MeteoData::MeteoData()
     // one of the sensors is read on the address 0x44, others are set to the address 0x45 etc.
     pinMode(SENSOR_D_PIN, OUTPUT);
     pinMode(SENSOR_E_PIN, OUTPUT);
-    // pinMode(SENSOR_F_PIN, OUTPUT);
+    pinMode(SENSOR_F_PIN, OUTPUT);
+
     digitalWrite(SENSOR_D_PIN, LOW);  // 0x44
     digitalWrite(SENSOR_E_PIN, HIGH); // 0x45
-                                      //  digitalWrite(SENSOR_F_PIN, HIGH); // 0x45
+    digitalWrite(SENSOR_F_PIN, HIGH); // 0x45
 }
 
 void MeteoData::initializeSensors()
@@ -44,12 +45,12 @@ void MeteoData::setData()
     MeteoData::setSensorData(&sensorE);
     digitalWrite(SENSOR_E_PIN, HIGH); // 0x45
 
-    // // F
-    // digitalWrite(SENSOR_F_PIN, LOW); // 0x44
-    // delay(delayTime);
-    // Serial.print("Sensor F :");
-    // MeteoData::setSensorData(&sensorF);
-    // digitalWrite(SENSOR_F_PIN, HIGH); // 0x45
+    // F
+    digitalWrite(SENSOR_F_PIN, LOW); // 0x44
+    delay(delayTime);
+    Serial.print("Sensor F :");
+    MeteoData::setSensorData(&sensorF);
+    digitalWrite(SENSOR_F_PIN, HIGH); // 0x45
 }
 
 void MeteoData::setSensorData(TempAndHumidity *data)

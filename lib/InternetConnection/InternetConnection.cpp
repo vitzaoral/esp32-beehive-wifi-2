@@ -195,13 +195,13 @@ void InternetConnection::sendDataToBlynk(
         Blynk.virtualWrite(V2, percent);
 
         // meteo data F
-        //Blynk.virtualWrite(V12, meteoData.sensorF.humidity);
-        //Blynk.virtualWrite(V13, meteoData.sensorF.temperature);
+        Blynk.virtualWrite(V12, meteoData.sensorF.humidity);
+        Blynk.virtualWrite(V13, meteoData.sensorF.temperature);
 
         // microphones
         Blynk.virtualWrite(V44, microphoneController.sensorD.leq);
         Blynk.virtualWrite(V45, microphoneController.sensorE.leq);
-        //Blynk.virtualWrite(V46, microphoneController.sensorF.leq);
+        Blynk.virtualWrite(V46, microphoneController.sensorF.leq);
 
         // microphones - spectrum analyzer
         // TODO: moc dat, kam posilat..? Mozna zkusit jen pro jeden mic...

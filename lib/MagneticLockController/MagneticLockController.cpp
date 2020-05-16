@@ -15,14 +15,14 @@ void MagneticLockController::setData()
     // pinMode(LOCK_F_PIN, OUTPUT);
     pinMode(LOCK_ROOF_D_PIN, OUTPUT);
     pinMode(LOCK_ROOF_E_PIN, OUTPUT);
-    //  pinMode(LOCK_ROOF_F_PIN, OUTPUT);
+    pinMode(LOCK_ROOF_F_PIN, OUTPUT);
 
     digitalWrite(LOCK_D_PIN, LOW);
     digitalWrite(LOCK_E_PIN, LOW);
     //  digitalWrite(LOCK_F_PIN, LOW);
     digitalWrite(LOCK_ROOF_D_PIN, LOW);
     digitalWrite(LOCK_ROOF_E_PIN, LOW);
-    //  digitalWrite(LOCK_ROOF_F_PIN, LOW);
+    digitalWrite(LOCK_ROOF_F_PIN, LOW);
 
     delay(200);
     pinMode(LOCK_D_PIN, INPUT);
@@ -30,7 +30,7 @@ void MagneticLockController::setData()
     //  pinMode(LOCK_F_PIN, INPUT);
     pinMode(LOCK_ROOF_D_PIN, INPUT);
     pinMode(LOCK_ROOF_E_PIN, INPUT);
-    //  pinMode(LOCK_ROOF_F_PIN, INPUT);
+    pinMode(LOCK_ROOF_F_PIN, INPUT);
 
     // bottoms
     Serial.print("Magnetic lock D: ");
@@ -45,8 +45,8 @@ void MagneticLockController::setData()
     setSensorData(&sensorRoofD, LOCK_ROOF_D_PIN);
     Serial.print("Magnetic roof lock E: ");
     setSensorData(&sensorRoofE, LOCK_ROOF_E_PIN);
-    //  Serial.print("Magnetic roof lock F: ");
-    //  setSensorData(&sensorRoofF, LOCK_ROOF_F_PIN);
+    Serial.print("Magnetic roof lock F: ");
+    setSensorData(&sensorRoofF, LOCK_ROOF_F_PIN);
 }
 
 void MagneticLockController::setSensorData(LockData *data, int pin)
@@ -72,9 +72,8 @@ bool MagneticLockController::isOk()
            sensorE.locked &&
            //sensorF.locked &&
            sensorRoofD.locked &&
-           sensorRoofE.locked;
-           // &&
-           //sensorRoofF.locked;
+           sensorRoofE.locked &&
+           sensorRoofF.locked;
 }
 
 // alarm message for alarm notification
@@ -85,6 +84,6 @@ String MagneticLockController::getAlarmMessage()
            String(sensorE.locked ? "" : "E") +
            // String(sensorF.locked ? "" : "F") +
            String(sensorRoofD.locked ? "" : "r-D") +
-           String(sensorRoofE.locked ? "" : "r-E");
-    // String(sensorRoofF.locked ? "" : "r-F")
+           String(sensorRoofE.locked ? "" : "r-E") +
+           String(sensorRoofF.locked ? "" : "r-F");
 }
