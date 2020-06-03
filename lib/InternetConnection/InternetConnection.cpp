@@ -247,7 +247,7 @@ void InternetConnection::setMagneticLockControllerDataToBlynk(MagneticLockContro
 {
     Blynk.virtualWrite(V19, magneticLockController.sensorD.status);
     Blynk.virtualWrite(V20, magneticLockController.sensorE.status);
-    //Blynk.virtualWrite(V21, magneticLockController.sensorF.status);
+    Blynk.virtualWrite(V21, magneticLockController.sensorF.status);
 
     Blynk.virtualWrite(V14, magneticLockController.sensorRoofD.status);
     Blynk.virtualWrite(V15, magneticLockController.sensorRoofE.status);
