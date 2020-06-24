@@ -1,7 +1,5 @@
 #include "MagneticLockController.h"
 
-// TODO: stresni zamky na delsim kabelu - trva nez jim dojde ze jsou OFF..zkusit nejaky odpor...?
-
 MagneticLockController::MagneticLockController()
 {
 }
