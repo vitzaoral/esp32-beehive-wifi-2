@@ -116,11 +116,10 @@ bool InternetConnection::initializeConnection()
     WiFi.setTxPower(WIFI_POWER_MINUS_1dBm);
     delay(1);
 
-    // try config - quicker for WiFi connection
-    // TODO:
-    //WiFi.config(settings.ip, settings.gateway, settings.subnet, settings.gateway);
-
+    // try config - faster for WiFi connection
+    WiFi.config(settings.ip, settings.gateway, settings.subnet, settings.gateway);
     WiFi.begin(settings.wifiSSID, settings.wifiPassword);
+    
     while (WiFi.status() != WL_CONNECTED)
     {
         delay(500);
