@@ -113,7 +113,7 @@ bool InternetConnection::initializeConnection()
     Serial.println("\r\nTry connecting to: " + String(settings.wifiSSID));
 
     //save battery power, set lowest WiFi power
-    WiFi.setTxPower(WIFI_POWER_MINUS_1dBm);
+    // WiFi.setTxPower(WIFI_POWER_MINUS_1dBm);
     delay(1);
 
     // try config - faster for WiFi connection
@@ -124,7 +124,7 @@ bool InternetConnection::initializeConnection()
     {
         delay(500);
         Serial.print(".");
-        if (connAttempts > 20)
+        if (connAttempts > 30)
         {
             Serial.println("Error - couldn't connect to WIFI");
             return false;
