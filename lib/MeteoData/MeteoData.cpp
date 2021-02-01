@@ -29,7 +29,8 @@ void MeteoData::initializeSensors()
 
 void MeteoData::setData()
 {
-    int delayTime = 10;
+    int delayTime = 20;
+    delay(delayTime);
 
     // D
     digitalWrite(SENSOR_D_PIN, LOW); // 0x44
