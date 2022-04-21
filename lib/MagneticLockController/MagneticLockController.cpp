@@ -69,7 +69,7 @@ bool MagneticLockController::isOk()
     return sensorD.locked &&
            sensorE.locked &&
            sensorF.locked &&
-           sensorRoofD.locked &&
+           //sensorRoofD.locked && // TODO: not working
            sensorRoofE.locked &&
            sensorRoofF.locked;
 }

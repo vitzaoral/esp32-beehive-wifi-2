@@ -163,21 +163,23 @@ void InternetConnection::disconnect()
 }
 
 void InternetConnection::sendDataToBlynk(
-    MeteoData meteoData,
     PowerController powerController,
-    MagneticLockController magneticLockController,
-    MicrophoneController microphoneController)
+    MagneticLockController magneticLockController)
 {
     // create data to send to Blynk
     if (Blynk.connected())
     {
-        // meteo data D
-        Blynk.virtualWrite(V4, meteoData.sensorD.humidity);
-        Blynk.virtualWrite(V5, meteoData.sensorD.temperature);
+        // // meteo data D
+        // Blynk.virtualWrite(V4, meteoData.sensorD.humidity);
+        // Blynk.virtualWrite(V5, meteoData.sensorD.temperature);
 
-        // meteo data E
-        Blynk.virtualWrite(V6, meteoData.sensorE.humidity);
-        Blynk.virtualWrite(V7, meteoData.sensorE.temperature);
+        // // meteo data E
+        // Blynk.virtualWrite(V6, meteoData.sensorE.humidity);
+        // Blynk.virtualWrite(V7, meteoData.sensorE.temperature);
+
+        // // meteo data F
+        // Blynk.virtualWrite(V12, meteoData.sensorF.humidity);
+        // Blynk.virtualWrite(V13, meteoData.sensorF.temperature);
 
         // solar power data
         Blynk.virtualWrite(V8, powerController.sensor_solar.loadVoltage);
@@ -193,14 +195,10 @@ void InternetConnection::sendDataToBlynk(
         int percent = ((powerController.sensor_battery.loadVoltage - 2.75) / 1.454) * 100.0;
         Blynk.virtualWrite(V2, percent);
 
-        // meteo data F
-        Blynk.virtualWrite(V12, meteoData.sensorF.humidity);
-        Blynk.virtualWrite(V13, meteoData.sensorF.temperature);
-
         // microphones
-        Blynk.virtualWrite(V44, microphoneController.sensorD.leq);
-        Blynk.virtualWrite(V45, microphoneController.sensorE.leq);
-        Blynk.virtualWrite(V46, microphoneController.sensorF.leq);
+        // Blynk.virtualWrite(V44, microphoneController.sensorD.leq);
+        // Blynk.virtualWrite(V45, microphoneController.sensorE.leq);
+        // Blynk.virtualWrite(V46, microphoneController.sensorF.leq);
 
         // microphones - spectrum analyzer
         // TODO: moc dat, kam posilat..? Mozna zkusit jen pro jeden mic...

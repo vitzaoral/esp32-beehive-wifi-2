@@ -16,7 +16,7 @@ public:
   bool isAlarm;
   bool initializeConnection();
   void disconnect();
-  void sendDataToBlynk(MeteoData, PowerController, MagneticLockController, MicrophoneController);
+  void sendDataToBlynk(PowerController, MagneticLockController);
   void alarmMagneticController(MagneticLockController);
   void blynkRunIfAlarm();
   void setMagneticLockControllerDataToBlynkIfAlarm(MagneticLockController);

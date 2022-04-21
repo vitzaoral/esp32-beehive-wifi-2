@@ -4,10 +4,10 @@
 #include "esp32-hal-cpu.h"
 
 InternetConnection connection;
-MeteoData meteoData;
+// MeteoData meteoData;
 PowerController powerController;
 MagneticLockController magneticLockController;
-MicrophoneController microphoneController;
+// MicrophoneController microphoneController;
 
 void sendDataToInternet();
 void checkMagneticLockAlarm();
@@ -25,14 +25,14 @@ void setup()
   Serial.begin(115200);
 
   // save battery, setup lower CPU frequency (default is 240Mhz)
-  setCpuFrequencyMhz(80);
+  //setCpuFrequencyMhz(80);
   Serial.println("Get CPU Frequency: " + String(getCpuFrequencyMhz()) + "Mhz");
 
   timerSendDataToInternet.start();
   timerMagneticLockAlarm.start();
   timerSendDataToBlynkIfAlarm.start();
 
-  meteoData.initializeSensors();
+  // meteoData.initializeSensors();
 
   // set first data for gyroscope and magnetic locks, other in timers..
   magneticLockController.setData();
@@ -54,13 +54,13 @@ void loop()
 void sendDataToInternet()
 {
   Serial.println("Setting sensors data");
-  meteoData.setData();
+  // meteoData.setData();
   powerController.setData();
 
   if (!connection.isAlarm)
   {
     // takes 30 sec, only without alarm..
-    microphoneController.setData();
+    // microphoneController.setData();
   }
   // gyroscope and magnetic locks data are set in other timer more often, so we have actual data
 
@@ -69,7 +69,7 @@ void sendDataToInternet()
   {
 
     Serial.println("Sending data to Blynk");
-    connection.sendDataToBlynk(meteoData, powerController, magneticLockController, microphoneController);
+    connection.sendDataToBlynk(powerController, magneticLockController);
     connection.checkNewVersionAndUpdate();
     connection.disconnect();
   }
