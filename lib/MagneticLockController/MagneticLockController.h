@@ -9,9 +9,9 @@
 #define LOCK_F_PIN 27
 
 // roofs
-#define LOCK_ROOF_D_PIN 14
-#define LOCK_ROOF_E_PIN 18
-#define LOCK_ROOF_F_PIN 13
+// #define LOCK_ROOF_D_PIN 14
+// #define LOCK_ROOF_E_PIN 18
+// #define LOCK_ROOF_F_PIN 13
 
 struct LockData
 {
@@ -30,9 +30,9 @@ public:
   LockData sensorF;
 
   // roofs
-  LockData sensorRoofD;
-  LockData sensorRoofE;
-  LockData sensorRoofF;
+  // LockData sensorRoofD;
+  // LockData sensorRoofE;
+  // LockData sensorRoofF;
 
   void setData();
   bool isOk();
